@@ -2,37 +2,320 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=index.html">
-    <title>Konverter MarkItDown Microsoft</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konverter Dokumen | PAPIC OS</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; color: #333; }
-        .upload-container { border: 3px dashed #0078d4; padding: 30px; text-align: center; border-radius: 8px; background: #f3f2f1; margin-bottom: 20px; }
-        button { background: #0078d4; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #106ebe; }
-        pre { background: #252526; color: #d4d4d4; padding: 20px; border-radius: 6px; white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', Courier, monospace; min-height: 100px; }
-        .loading { color: #0078d4; font-weight: bold; display: none; }
+        :root {
+            /* Warna PAPIC OS */
+            --papic-bg: #ffffff;
+            --papic-bg-soft: #f8fafb;
+            --papic-text: #111216;
+            --papic-muted: #555961;
+            --papic-border: #e8eaee;
+            --papic-orange: #fc6432;
+            --papic-orange-hover: #e55a2a;
+            
+            /* Tipografi */
+            --font-display: 'Hanken Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--papic-bg-soft);
+            color: var(--papic-text);
+            line-height: 1.5;
+            padding: 32px 16px;
+        }
+
+        .tool-wrapper {
+            max-width: 760px; /* Standar halaman artikel/tool */
+            margin: 0 auto;
+            background: var(--papic-bg);
+            border: 1px solid var(--papic-border);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 12px 32px rgba(17, 18, 22, 0.05);
+        }
+
+        /* Typography Header */
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            color: var(--papic-muted);
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+
+        /* Custom File Picker Ala Brankas */
+        .file-input-hidden {
+            display: none;
+        }
+
+        .custom-file-picker {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--papic-border);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 24px;
+            background: var(--papic-bg);
+        }
+
+        .custom-file-picker:hover {
+            border-color: #cfd3dc;
+            background: var(--papic-bg-soft);
+        }
+
+        .picker-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            overflow: hidden;
+        }
+
+        .picker-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: rgba(252, 100, 50, 0.12);
+            color: var(--papic-orange);
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .picker-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .picker-text {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .picker-text strong {
+            font-size: 15px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .picker-text small {
+            font-size: 13px;
+            color: var(--papic-muted);
+        }
+
+        .picker-btn {
+            background: var(--papic-bg-soft);
+            color: var(--papic-text);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--papic-border);
+            flex-shrink: 0;
+            font-family: var(--font-body);
+        }
+
+        /* Primary Button CTA */
+        .btn-primary {
+            width: 100%;
+            min-height: 48px;
+            background: var(--papic-orange);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--papic-orange-hover);
+        }
+
+        .btn-primary:disabled {
+            background: #d9d9d9;
+            cursor: not-allowed;
+        }
+
+        /* Result Section */
+        .divider {
+            height: 1px;
+            background: var(--papic-border);
+            margin: 32px 0;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .result-header h3 {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        /* Secondary Button untuk Download */
+        .btn-secondary {
+            display: none; /* Disembunyikan sampai ada hasil */
+            background: transparent;
+            color: var(--papic-text);
+            border: 1px solid var(--papic-border);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--papic-bg-soft);
+            border-color: #cfd3dc;
+        }
+
+        .result-box {
+            background: var(--papic-bg-soft);
+            border: 1px solid var(--papic-border);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            color: var(--papic-muted);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-height: 120px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 640px) {
+            .tool-wrapper {
+                padding: 24px 16px;
+                border-radius: 12px;
+            }
+            .custom-file-picker {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .picker-btn {
+                width: 100%;
+                text-align: center;
+            }
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <h2>📄 Pengubah Dokumen ke Markdown</h2>
-    <p>Upload file Word (.docx), PDF, Excel (.xlsx), atau PowerPoint (.pptx) untuk diubah menjadi format teks Markdown secara otomatis.</p>
-    
-    <div class="upload-container">
-        <input type="file" id="fileInput" accept=".docx,.pdf,.xlsx,.pptx,.txt">
-        <p style="font-size: 14px; color: #666;">Pilih dokumen kamu di atas, lalu klik tombol di bawah:</p>
-        <button onclick="prosesKonversi()">Mulai Konversi</button>
-        <p class="loading" id="statusLoading">Sedang memproses dokumen... Mohon tunggu...</p>
-    </div>
+    <main class="tool-wrapper">
+        <h1>Ubah ke Markdown</h1>
+        <p class="subtitle">Ekstrak teks dari Word, PDF, Excel, atau PPT menjadi format Markdown seketika.</p>
 
-    <h3>📝 Hasil Teks Markdown:</h3>
-    <pre id="hasilMarkdown">Hasil konversi akan muncul di sini...</pre>
+        <input type="file" id="fileInput" class="file-input-hidden" accept=".docx,.pdf,.xlsx,.pptx,.txt">
+        <label for="fileInput" class="custom-file-picker">
+            <div class="picker-info">
+                <div class="picker-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </div>
+                <div class="picker-text">
+                    <strong id="fileNameDisplay">Belum ada file dipilih</strong>
+                    <small>Format: .docx, .pdf, .xlsx, .pptx</small>
+                </div>
+            </div>
+            <span class="picker-btn">Pilih File</span>
+        </label>
+
+        <button id="btnConvert" class="btn-primary" onclick="prosesKonversi()">
+            Mulai Konversi
+        </button>
+
+        <div class="divider"></div>
+
+        <div class="result-header">
+            <h3>Hasil Teks</h3>
+            <button id="btnDownload" class="btn-secondary" onclick="downloadMarkdown()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Download .md
+            </button>
+        </div>
+        
+        <div id="hasilMarkdown" class="result-box">Pilih dokumen dan klik konversi untuk melihat hasilnya di sini...</div>
+    </main>
 
     <script>
+        // Variabel global untuk menyimpan nama file asli
+        let originalFileName = "hasil";
+
+        // Logic UI untuk File Picker Custom
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                const file = this.files[0];
+                fileNameDisplay.textContent = file.name;
+                fileNameDisplay.style.color = "var(--papic-text)";
+                originalFileName = file.name.replace(/\.[^/.]+$/, ""); // Simpan nama tanpa ekstensi
+            } else {
+                fileNameDisplay.textContent = "Belum ada file dipilih";
+                fileNameDisplay.style.color = "inherit";
+            }
+        });
+
+        // Logic API Vercel Python
         async function prosesKonversi() {
-            const fileInput = document.getElementById('fileInput');
             const hasilBox = document.getElementById('hasilMarkdown');
-            const loadingText = document.getElementById('statusLoading');
+            const btnConvert = document.getElementById('btnConvert');
+            const btnDownload = document.getElementById('btnDownload');
             
             if (fileInput.files.length === 0) {
                 alert('Silakan pilih file dokumen terlebih dahulu!');
@@ -42,30 +325,57 @@
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
 
-            // Tampilkan animasi loading
-            loadingText.style.display = "block";
-            hasilBox.innerText = "Memproses...";
+            // Set UI ke status Loading
+            btnConvert.disabled = true;
+            btnConvert.innerHTML = "Memproses...";
+            hasilBox.style.color = "var(--papic-muted)";
+            hasilBox.innerText = "Membaca dokumen dan mengubah struktur... Mohon tunggu.";
+            btnDownload.style.display = "none"; // Sembunyikan tombol download
 
             try {
-                // Menembak endpoint backend lokal/Vercel kita
                 const response = await fetch('/convert', {
                     method: 'POST',
                     body: formData
                 });
 
                 const data = await response.json();
-                loadingText.style.display = "none";
                 
                 if (response.ok) {
-                    // Masukkan teks markdown yang berhasil diekstrak ke dalam kotak
                     hasilBox.innerText = data.markdown;
+                    hasilBox.style.color = "var(--papic-text)"; // Kontras lebih tinggi saat berhasil
+                    btnDownload.style.display = "flex"; // Munculkan tombol download
                 } else {
-                    hasilBox.innerText = "Gagal memproses: " + data.error;
+                    hasilBox.innerText = "Gagal: " + data.error;
                 }
             } catch (err) {
-                loadingText.style.display = "none";
-                hasilBox.innerText = "Terjadi kesalahan jaringan: " + err.message;
+                hasilBox.innerText = "Error Jaringan: " + err.message;
+            } finally {
+                // Kembalikan tombol CTA ke keadaan semula
+                btnConvert.disabled = false;
+                btnConvert.innerHTML = "Mulai Konversi";
             }
+        }
+
+        // Logic Download File Markdown
+        function downloadMarkdown() {
+            const markdownText = document.getElementById('hasilMarkdown').innerText;
+            
+            // Buat blob dari teks
+            const blob = new Blob([markdownText], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            
+            // Buat elemen <a> sementara untuk men-trigger download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${originalFileName}.md`; 
+            document.body.appendChild(a);
+            a.click();
+            
+            // Bersihkan URL dari memori setelah selesai
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
         }
     </script>
 </body>
