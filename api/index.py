@@ -6,7 +6,7 @@ import tempfile
 app = Flask(__name__)
 markitdown = MarkItDown()
 
-# Endpoint Utama (Halaman depan otomatis membaca index.html di luar)
+# Endpoint Utama untuk memanggil index.html di dalam folder static
 @app.route('/')
 def home():
     return app.send_static_file('index.html')
