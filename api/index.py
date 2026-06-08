@@ -6,11 +6,6 @@ import tempfile
 app = Flask(__name__)
 markitdown = MarkItDown()
 
-# Endpoint Utama untuk memanggil index.html di dalam folder static
-@app.route('/')
-def home():
-    return app.send_static_file('index.html')
-
 # Endpoint untuk memproses konversi file
 @app.route('/convert', methods=['POST'])
 def convert_file():
