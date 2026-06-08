@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/convert",
+      "destination": "/api/index.py"
+    }
+  ]
+}
